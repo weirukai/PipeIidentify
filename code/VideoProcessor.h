@@ -5,11 +5,17 @@
 #ifndef PIPEIDENTIFY_VIDEOPROCESSOR_H
 #define PIPEIDENTIFY_VIDEOPROCESSOR_H
 
-
+#include <opencv2/opencv.hpp>
+#include <opencv/highgui.h>
+using namespace  cv;
 class VideoProcessor {
+    /**
+     *
+     *  多用于静态处理，多为静态方法
+     * */
 
 public:
-    static void
+    static Mat getVideoImage();
 
 
 

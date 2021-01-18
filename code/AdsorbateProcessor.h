@@ -1,0 +1,14 @@
+//
+// Created by 魏 on 2021/1/18.
+//
+
+#ifndef PIPEIDENTIFY_ADSORBATEPROCESSOR_H
+#define PIPEIDENTIFY_ADSORBATEPROCESSOR_H
+
+
+class AdsorbateProcessor {
+
+};
+
+
+#endif //PIPEIDENTIFY_ADSORBATEPROCESSOR_H

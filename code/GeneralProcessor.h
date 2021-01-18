@@ -13,8 +13,11 @@
  *
  * */
 class GeneralProcessor {
+
+
 public:
     static cv::Mat preProcess(cv::Mat image);
+    static cv::Mat showImage(cv::String windowName,cv::Mat image );
 
 };
 
