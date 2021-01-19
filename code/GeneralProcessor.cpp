@@ -19,21 +19,8 @@ cv::Mat GeneralProcessor::preProcess(cv::Mat image) {
     GaussianBlur(image, image, Size(5, 5), 0);
     cvtColor(image, image, COLOR_RGB2HSV);
     split(image, channels);
-    channels[2]=channels.at(2)+40;
+    channels[2]=channels.at(2)+100;
     merge(channels,image);
     cvtColor(image, image, COLOR_HSV2RGB);
-    showImage("V",image);
-
-
-}
-
-Mat GeneralProcessor::showImage(cv::String windowName, cv::Mat image) {
-    /**
-     * 用来显示图片的部分，用以赋值到其他地方
-     * */
-    namedWindow(windowName,0);
-    resizeWindow(windowName,640,512);
-    imshow(windowName, image);
-    waitKey(0);
-    destroyAllWindows();
+    return image;
 }
