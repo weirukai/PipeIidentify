@@ -15,7 +15,7 @@ class VideoProcessor {
      * */
 
 public:
-    static Mat getVideoImage();
+    static Mat getVideoImage(String videoPath);
 
 
 
