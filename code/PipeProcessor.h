@@ -7,6 +7,8 @@
 
 #include <opencv2/opencv.hpp>
 #include <opencv/highgui.h>
+#include <vector>
+using namespace std;
 using namespace cv;
 class PipeProcessor {
 private:
@@ -23,6 +25,13 @@ public:
     static Mat getPipeByThreshold(Mat image);
     static Mat getPipeByBoundary(Mat image);
     static Mat locatePipe(Mat image);
+    /**获取二值图像的边缘，后面利用边缘探测前进方向*/
+    static vector<Point> getContours(Mat image);
+
+    static vector<Point> getMiddleLine(vector<Point>   contour);
+
+
+
 
 
 };

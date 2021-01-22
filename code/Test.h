@@ -18,6 +18,11 @@ public:
     static void test();
     static void showImage(cv::String windowName, cv::Mat image);
 
+    static void test2();
+
+    static const cv::String videoPath;
+
+    void test3();
 };
 
 

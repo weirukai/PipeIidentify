@@ -3,9 +3,3 @@
 //
 
 #include "VideoProcessor.h"
-Mat VideoProcessor::getVideoImage() {
-
-
-
-
-}
