@@ -8,8 +8,11 @@
 #include <opencv2/opencv.hpp>
 #include <opencv/highgui.h>
 #include <vector>
+#define Rect 0
+#define oval 1
 using namespace std;
 using namespace cv;
+
 class PipeProcessor {
 private:
 public:
@@ -19,21 +22,35 @@ public:
      * 2.边缘
      * 3.阈值
      *
-     * 通过表决器来判断位置
+     * 可以通过表决器来判断位置
      * */
     static Mat getPipeByColor(Mat image);
+
     static Mat getPipeByThreshold(Mat image);
+
     static Mat getPipeByBoundary(Mat image);
+
     static Mat locatePipe(Mat image);
+
     /**获取二值图像的边缘，后面利用边缘探测前进方向*/
     static vector<Point> getContours(Mat image);
 
-    static vector<Point> getMiddleLine(vector<Point>   contour);
+    /**通过边界寻找中心线，根据中心线进行导航*/
+
+    static vector<Point> getMiddleLine(vector<vector<Point>> contour);
+
+    static Mat getObstruction(Mat image);
+
+    static int getObstructionType(Mat image);
+
+    static bool isRect(Mat image);
+
+    static bool isOval(Mat image);
 
 
+    static bool isRect(Mat imageBinary, Mat origin);
 
-
-
+    static int getObstructionType(Mat imageBinary, Mat origin);
 };
 
 

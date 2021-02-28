@@ -6,7 +6,7 @@
 #include "PipeProcessor.h"
 #include "GeneralProcessor.h"
 
-const cv::String Test::imagePath = "D:\\ClCodes\\PipeIdentify\\images\\202.jpg";
+const cv::String Test::imagePath = "D:\\ClCodes\\PipeIdentify\\images\\430.jpg";
 const cv::String Test::videoPath = "D:\\ClCodes\\PipeIdentify\\videos\\20-52-50.avi";
 
 /**
@@ -21,14 +21,15 @@ void Test::test() {
      * ******/
     Mat image = imread(Test::imagePath, IMREAD_ANYCOLOR);
     Mat imageBak = image.clone();
-    image = GeneralProcessor::preProcess(image);
-    image = PipeProcessor::getPipeByThreshold(image);
-    vector<Point> contour = PipeProcessor::getContours(image);
-    vector<vector<Point>> contours;
-    contours.push_back(contour);
-    drawContours(imageBak, contours, -1, Scalar(0, 255, 255), 2);
+    Mat imageGray;
+//    image = GeneralProcessor::preProcess(image);
+    imageGray = PipeProcessor::getPipeByBoundary(image);
+//    vector<Point> contour = PipeProcessor::getContours(image);
+//    vector<vector<Point>> contours;
+//    contours.push_back(contour);
+//    drawContours(imageBak, contours, -1, Scalar(0, 255, 255), 2);
     imageBak.copyTo(image, image);
-    showImage("threshold", image);
+    showImage("threshold", imageGray);
     waitKey(0);
 }
 
@@ -77,6 +78,20 @@ void Test::test3() {
 
 }
 
+void Test::test4(){
+    Mat image = imread(Test::imagePath, IMREAD_ANYCOLOR);
+    Mat imageBak = image.clone();
+    Mat obstructionImage = PipeProcessor::getObstruction(imageBak);
+    showImage("obstruction",obstructionImage);
+    PipeProcessor::isRect(obstructionImage,image);
+    showImage("origin",image);
+}
+
+
+
+
+
+
 
 void Test::showImage(cv::String windowName, cv::Mat image) {
 
@@ -85,7 +100,7 @@ void Test::showImage(cv::String windowName, cv::Mat image) {
     resizeWindow(windowName, 640, 512);
     imshow(windowName, image);
     //测试视频或者图片的时候切换
-    waitKey(1);
+    waitKey(0);
 //    waitKey(0);
 //    destroyAllWindows();
 }
