@@ -8,8 +8,8 @@
 #include <opencv2/opencv.hpp>
 #include <opencv/highgui.h>
 #include <vector>
-#define Rect 0
-#define oval 1
+#define RECT 0
+#define OVAL 1
 using namespace std;
 using namespace cv;
 
@@ -37,7 +37,7 @@ public:
 
     /**通过边界寻找中心线，根据中心线进行导航*/
 
-    static vector<Point> getMiddleLine(vector<vector<Point>> contour);
+    static vector<Point> getMiddleLine(vector<Point> contour,Mat image);
 
     static Mat getObstruction(Mat image);
 
@@ -51,6 +51,12 @@ public:
     static bool isRect(Mat imageBinary, Mat origin);
 
     static int getObstructionType(Mat imageBinary, Mat origin);
+
+
+
+    static int judgeByAngle(vector<Point> contour_poly);
+
+    static int getAngle(Point apex1, Point apex2, Point pos);
 };
 
 

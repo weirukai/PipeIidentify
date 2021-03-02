@@ -6,9 +6,9 @@
 #include "PipeProcessor.h"
 #include "GeneralProcessor.h"
 
-const cv::String Test::imagePath = "D:\\ClCodes\\PipeIdentify\\images\\430.jpg";
+const cv::String Test::imagePath = "D:\\ClCodes\\PipeIdentify\\images\\1163.jpg";
+//const cv::String Test::videoPath = "D:\\ClCodes\\PipeIdentify\\videos\\21-5-38.avi";
 const cv::String Test::videoPath = "D:\\ClCodes\\PipeIdentify\\videos\\20-52-50.avi";
-
 /**
  * 为保证main函数的结构清晰，测试需要在这里进行
  * 除main外，其他文件中不应该调用test测试类
@@ -49,14 +49,15 @@ void Test::test2() {
             vector<vector<Point>> contours;
             contours.push_back(contour);
             drawContours(imageBak, contours, -1, Scalar(0, 0, 255), 2);
+            PipeProcessor::getMiddleLine(contour,imageBak);
 
             //绘制外接矩形
-            vector<Point2f> boxPts(4);
-            RotatedRect rect = minAreaRect(contour);
-            rect.points(boxPts.data());
-            for (int j = 0; j < 4; j++) {
-                line(imageBak, boxPts[j], boxPts[(j + 1) % 4], Scalar(0, 0, 255), 2, 8);  //绘制最小外接矩形每条边
-            }
+//            vector<Point2f> boxPts(4);
+//            RotatedRect rect = minAreaRect(contour);
+//            rect.points(boxPts.data());
+//            for (int j = 0; j < 4; j++) {
+//                line(imageBak, boxPts[j], boxPts[(j + 1) % 4], Scalar(0, 0, 255), 2, 8);  //绘制最小外接矩形每条边
+//            }
 
 
             imageBak.copyTo(image, image);
@@ -73,7 +74,26 @@ void Test::test2() {
 void Test::test3() {
     Mat image = imread(Test::imagePath, IMREAD_ANYCOLOR);
     Mat imageBak = image.clone();
-    Mat cannyImage = PipeProcessor::getPipeByBoundary(image);
+    image = GeneralProcessor::preProcess(image);
+    image = PipeProcessor::getPipeByColor(image);
+    vector<Point> contour = PipeProcessor::getContours(image);
+    //绘制边界
+    vector<vector<Point>> contours;
+    contours.push_back(contour);
+    drawContours(imageBak, contours, -1, Scalar(0, 0, 255), 2);
+    PipeProcessor::getMiddleLine(contour,imageBak);
+
+    //绘制外接矩形
+//            vector<Point2f> boxPts(4);
+//            RotatedRect rect = minAreaRect(contour);
+//            rect.points(boxPts.data());
+//            for (int j = 0; j < 4; j++) {
+//                line(imageBak, boxPts[j], boxPts[(j + 1) % 4], Scalar(0, 0, 255), 2, 8);  //绘制最小外接矩形每条边
+//            }
+
+
+    imageBak.copyTo(image, image);
+    showImage("video", imageBak);
 
 
 }
@@ -87,7 +107,36 @@ void Test::test4(){
     showImage("origin",image);
 }
 
+void Test::test5(){
+    VideoCapture capture(videoPath);
+    Mat image;
+    Mat imageMask;
+    Mat imageBak;
+    while (true) {
+        if (capture.read(image) && capture.isOpened()) {
+            imageBak= image.clone();
+            image = GeneralProcessor::preProcess(image);
+            imageMask = PipeProcessor::getObstruction(imageBak);
+            int type=PipeProcessor::getObstructionType(imageMask,imageBak);
 
+            //绘制外接矩形
+//            vector<Point2f> boxPts(4);
+//            RotatedRect rect = minAreaRect(contour);
+//            rect.points(boxPts.data());
+//            for (int j = 0; j < 4; j++) {
+//                line(imageBak, boxPts[j], boxPts[(j + 1) % 4], Scalar(0, 0, 255), 2, 8);  //绘制最小外接矩形每条边
+//            }
+
+
+            imageBak.copyTo(image, image);
+            showImage("video", imageBak);
+
+        } else {
+            break;
+        }
+    }
+
+}
 
 
 
