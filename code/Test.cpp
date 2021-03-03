@@ -5,10 +5,13 @@
 #include "Test.h"
 #include "PipeProcessor.h"
 #include "GeneralProcessor.h"
+#include "AdsorbateProcessor.h"
+#include <io.h>
 
-const cv::String Test::imagePath = "D:\\ClCodes\\PipeIdentify\\images\\1163.jpg";
+const cv::String Test::imagePath = "D:\\ClCodes\\PipeIdentify\\images\\1000.jpg";
 //const cv::String Test::videoPath = "D:\\ClCodes\\PipeIdentify\\videos\\21-5-38.avi";
 const cv::String Test::videoPath = "D:\\ClCodes\\PipeIdentify\\videos\\20-52-50.avi";
+
 /**
  * 为保证main函数的结构清晰，测试需要在这里进行
  * 除main外，其他文件中不应该调用test测试类
@@ -49,7 +52,7 @@ void Test::test2() {
             vector<vector<Point>> contours;
             contours.push_back(contour);
             drawContours(imageBak, contours, -1, Scalar(0, 0, 255), 2);
-            PipeProcessor::getMiddleLine(contour,imageBak);
+            PipeProcessor::getMiddleLine(contour, imageBak);
 
             //绘制外接矩形
 //            vector<Point2f> boxPts(4);
@@ -81,7 +84,7 @@ void Test::test3() {
     vector<vector<Point>> contours;
     contours.push_back(contour);
     drawContours(imageBak, contours, -1, Scalar(0, 0, 255), 2);
-    PipeProcessor::getMiddleLine(contour,imageBak);
+    PipeProcessor::getMiddleLine(contour, imageBak);
 
     //绘制外接矩形
 //            vector<Point2f> boxPts(4);
@@ -98,26 +101,26 @@ void Test::test3() {
 
 }
 
-void Test::test4(){
+void Test::test4() {
     Mat image = imread(Test::imagePath, IMREAD_ANYCOLOR);
     Mat imageBak = image.clone();
-    Mat obstructionImage = PipeProcessor::getObstruction(imageBak);
-    showImage("obstruction",obstructionImage);
-    PipeProcessor::isRect(obstructionImage,image);
-    showImage("origin",image);
+    Mat obstructionImage = AdsorbateProcessor::getObstruction(imageBak);
+    showImage("obstruction", obstructionImage);
+    AdsorbateProcessor::isRect(obstructionImage, image);
+    showImage("origin", image);
 }
 
-void Test::test5(){
+void Test::test5() {
     VideoCapture capture(videoPath);
     Mat image;
     Mat imageMask;
     Mat imageBak;
     while (true) {
         if (capture.read(image) && capture.isOpened()) {
-            imageBak= image.clone();
+            imageBak = image.clone();
             image = GeneralProcessor::preProcess(image);
-            imageMask = PipeProcessor::getObstruction(imageBak);
-            int type=PipeProcessor::getObstructionType(imageMask,imageBak);
+            imageMask = AdsorbateProcessor::getObstruction(imageBak);
+            int type = AdsorbateProcessor::getObstructionType(imageMask, imageBak);
 
             //绘制外接矩形
 //            vector<Point2f> boxPts(4);
@@ -138,9 +141,39 @@ void Test::test5(){
 
 }
 
+/**
+ * 数据统计时候使用
+ * */
+void Test::test6() {
+    char *filePath = "D:\\ClCodes\\PipeIdentify\\images\\cube";
+    vector<string> files;
+    getFiles(filePath, files);
+    int cubeCount = 0;
+    int CylinderCount = 0;
+    int type = -1;
+    for (int i = 0; type = -1, i < files.size(); ++i) {
+        Mat image = imread(files[i], IMREAD_ANYCOLOR);
+        Mat imageBak = image.clone();
+        Mat obstructionImage = AdsorbateProcessor::getObstruction(imageBak);
+        //showImage("obstruction",obstructionImage);
+        type = AdsorbateProcessor::isRect(obstructionImage, image);
+        if (type == RECT)
+            cubeCount++;
+        else if (type == OVAL)
+            CylinderCount++;
+    }
+
+
+    return;
+}
 
 
 
+
+
+/**
+ * 工具函数
+ * **/
 
 void Test::showImage(cv::String windowName, cv::Mat image) {
 
@@ -152,4 +185,25 @@ void Test::showImage(cv::String windowName, cv::Mat image) {
     waitKey(0);
 //    waitKey(0);
 //    destroyAllWindows();
+}
+
+void Test::getFiles(string path, vector<string> &files) {
+    //文件句柄
+    long hFile = 0;
+    //文件信息
+    struct _finddata_t fileinfo;
+    string p;
+    if ((hFile = _findfirst(p.assign(path).append("\\*").c_str(), &fileinfo)) != -1) {
+        do {
+            //如果是目录,迭代之
+            //如果不是,加入列表
+            if ((fileinfo.attrib & _A_SUBDIR)) {
+                if (strcmp(fileinfo.name, ".") != 0 && strcmp(fileinfo.name, "..") != 0)
+                    getFiles(p.assign(path).append("\\").append(fileinfo.name), files);
+            } else {
+                files.push_back(p.assign(path).append("\\").append(fileinfo.name));
+            }
+        } while (_findnext(hFile, &fileinfo) == 0);
+        _findclose(hFile);
+    }
 }

@@ -27,6 +27,10 @@ public:
     static void test4();
 
     static void test5();
+
+    static void getFiles(std::string path, std::vector<std::string> &files);
+
+    static void test6();
 };
 
 

@@ -39,24 +39,24 @@ public:
 
     static vector<Point> getMiddleLine(vector<Point> contour,Mat image);
 
-    static Mat getObstruction(Mat image);
-
-    static int getObstructionType(Mat image);
-
-    static bool isRect(Mat image);
-
-    static bool isOval(Mat image);
-
-
-    static bool isRect(Mat imageBinary, Mat origin);
-
-    static int getObstructionType(Mat imageBinary, Mat origin);
-
-
-
-    static int judgeByAngle(vector<Point> contour_poly);
-
-    static int getAngle(Point apex1, Point apex2, Point pos);
+//    static Mat getObstruction(Mat image);
+//
+//    static int getObstructionType(Mat image);
+//
+//    static bool isRect(Mat image);
+//
+//    static bool isOval(Mat image);
+//
+//
+//    static bool isRect(Mat imageBinary, Mat origin);
+//
+//    static int getObstructionType(Mat imageBinary, Mat origin);
+//
+//
+//
+//    static int judgeByAngle(vector<Point> contour_poly);
+//
+//    static int getAngle(Point apex1, Point apex2, Point pos);
 };
 
 
